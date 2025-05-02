@@ -82,6 +82,13 @@
   border-top-width: 2px;
   bottom: -2px;
 }
+.all-user-memento-marker.zoom-level-0.out-of-radius,
+.public-memento-marker.zoom-level-0.out-of-radius,
+.user-memento-marker.zoom-level-0.out-of-radius {
+  opacity: 0.50;
+  filter: grayscale(1);
+  pointer-events: none;
+}
 
 .user-memento-marker.zoom-level-1,
 .public-memento-marker.zoom-level-1,
@@ -100,6 +107,13 @@
   border-top-width: 5px;
   bottom: -10px;
 }
+.all-user-memento-marker.zoom-level-1.out-of-radius,
+.public-memento-marker.zoom-level-1.out-of-radius,
+.user-memento-marker.zoom-level-1.out-of-radius {
+  opacity: 0.50;
+  filter: grayscale(1);
+  pointer-events: none;
+}
 
 .user-memento-marker.zoom-level-2,
 .public-memento-marker.zoom-level-2,
@@ -117,6 +131,13 @@
   border-right-width: 5px;
   border-top-width: 5px;
   bottom: -10px;
+}
+.all-user-memento-marker.zoom-level-2.out-of-radius,  
+.public-memento-marker.zoom-level-2.out-of-radius,
+.user-memento-marker.zoom-level-2.out-of-radius {
+  opacity: 0.50;
+  filter: grayscale(1);
+  pointer-events: none;
 }
 
 /* Highlight styles */

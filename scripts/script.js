@@ -2681,7 +2681,7 @@ document.addEventListener("DOMContentLoaded", function () {
               
               // Add click handler to display memento in live feed
               marker.getElement().addEventListener('click', () => {
-                // On mobile, expand the info panel if collapsed
+                // Only expand panel on mobile devices
                 if (window.innerWidth < 1024) {
                   const infoTab = document.querySelector('.info-tab');
                   const expandLeftBtn = document.getElementById('expand-left');
@@ -3841,6 +3841,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
           // Store memento ID with marker
           marker.mementoId = memento.id;
+          
+          // Add click event to show memento details
+          marker.getElement().addEventListener('click', () => {
+            // Only expand panel on mobile devices
+            if (window.innerWidth < 1024) {
+              const infoTab = document.querySelector('.info-tab');
+              const expandLeftBtn = document.getElementById('expand-left');
+              const collapseLeftBtn = document.getElementById('collapse-left');
+              
+              if (infoTab && expandLeftBtn && collapseLeftBtn) {
+                infoTab.style.visibility = 'visible';
+                infoTab.classList.remove('hidden');
+                expandLeftBtn.classList.add('hidden');
+                collapseLeftBtn.classList.remove('hidden');
+                
+                if (map) {
+                  setTimeout(() => { map.resize(); }, 300);
+                }
+              }
+            }
+            
+            displayMementoInLiveFeed(memento);
+          });
           
           // Add marker to global markers array
           window.markers.push(marker);
