@@ -102,27 +102,45 @@
 .my-mementos-container .memento-item .media-section {
     position: relative;
     width: 100%;
-    padding-bottom: 100%;
+    height: auto;
     overflow: hidden;
     background: #f3f4f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .my-mementos-container .memento-item .memento-media {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
     width: 100%;
-    height: 100%;
+    height: auto;
     overflow: hidden;
 }
 
-.my-mementos-container .memento-item .memento-media img {
+.my-mementos-container .memento-item .memento-media img,
+.my-mementos-container .memento-item .memento-media video {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
     display: block;
 }
-.memento-item .memento-content {
+
+/* Add orientation-specific styles */
+.my-mementos-container .memento-item .memento-media.portrait img,
+.my-mementos-container .memento-item .memento-media.portrait video {
+    width: auto;
+    height: 100%;
+    max-height: 600px;
+}
+
+.my-mementos-container .memento-item .memento-media.landscape img,
+.my-mementos-container .memento-item .memento-media.landscape video {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+}
+
+.my-mementos-container .memento-item .memento-content {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -233,6 +251,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
+    align-items: center;
 }
 
 .my-mementos-container .memento-item .memento-tags .tag {
@@ -258,18 +277,18 @@
 }
 
 /* Placeholder styling */
-.my-mementos-container .memento-item .placeholder-media {
+.my-mementos-container .placeholder-media {
     width: 100%;
-    height: 100%;
+    height: 300px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    background: #f5f5f5;
+    align-items: center;
+    background: #f3f4f6;
     color: #9ca3af;
 }
 
-.my-mementos-container .memento-item .placeholder-media i {
-    font-size: 32px;
+.my-mementos-container .placeholder-media i {
+    font-size: 48px;
 }
 
 /* Confirmation Dialog Styles */
@@ -433,8 +452,6 @@
 .memento-info-list .media-section {
     width: 100%;
     background-color: #f3f4f6;
-    min-height: 200px;
-    max-height: 600px; /* Add maximum height to prevent extremely tall images */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -481,7 +498,7 @@
     color: #000000;
     height: 18px;
     width: 18px;
-    padding: 6px;
+    padding: 4px;
 }
 
 .my-mementos-container .memento-item .memento-category i {
@@ -489,10 +506,9 @@
 }
 
 .my-mementos-container .memento-item .memento-tags .tag {
-
     background-color: hsl(0, 0%, 100%);
     color: rgb(0, 0, 0);
-    padding: 6px;
+    padding: 4px;
     border: 1px solid hsl(0, 0%, 75%);
     border-radius: 50%;
 }

@@ -785,20 +785,23 @@ async function loadPreviewContent() {
       }
 
       // Handle media content
-      let mediaHtml = '<div class="placeholder-media"><i class="fas fa-eye"></i></div>';
+      let mediaHtml = '<div class="placeholder-media"><i class="fas fa-image"></i></div>';
       if (memento.media && Array.isArray(memento.media) && memento.media.length > 0) {
         const firstMedia = memento.media[0];
         if (typeof firstMedia === 'string') {
-          // If media is a direct URL string
-          mediaHtml = `<img src="${firstMedia}" alt="${memento.name || 'Memento'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-eye\\'></i></div>';">`;
+          // Check if it's a video by extension
+          if (firstMedia.endsWith('.mp4') || firstMedia.endsWith('.webm')) {
+            mediaHtml = `<video src="${firstMedia}" controls playsinline></video>`;
+          } else {
+            mediaHtml = `<img src="${firstMedia}" alt="${memento.name || 'Memento'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-image\\'></i></div>';">`;
+          }
         } else if (firstMedia && typeof firstMedia === 'object') {
-          // If media is an object with url property
           const mediaUrl = firstMedia.url || firstMedia.path || firstMedia.src;
           if (mediaUrl) {
-            if (firstMedia.type && firstMedia.type.startsWith('video/')) {
-              mediaHtml = `<video src="${mediaUrl}" controls></video>`;
+            if (firstMedia.type === 'video' || mediaUrl.endsWith('.mp4') || mediaUrl.endsWith('.webm')) {
+              mediaHtml = `<video src="${mediaUrl}" controls playsinline></video>`;
             } else {
-              mediaHtml = `<img src="${mediaUrl}" alt="${memento.name || 'Memento'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-eye\\'></i></div>';">`;
+              mediaHtml = `<img src="${mediaUrl}" alt="${memento.name || 'Memento'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-image\\'></i></div>';">`;
             }
           }
         }
@@ -856,9 +859,18 @@ async function loadPreviewContent() {
                   </span>
                 ` : ''}
                 ${tagSymbols.length > 0 ? `
-                  <span class="memento-tags">
-                    ${tagSymbols.map(symbol => `<span class="tag">${symbol}</span>`).join('')}
-                  </span>
+                  <div class="memento-tags">
+                    ${tagSymbols.slice(0, 3).map(symbol => `
+                      <span class="tag">
+                        <span class="tag-symbol">${symbol}</span>
+                      </span>
+                    `).join('')}
+                    ${tagSymbols.length > 3 ? `
+                      <span class="tag more-tags">
+                        <span class="tag-symbol">+${tagSymbols.length - 3}</span>
+                      </span>
+                    ` : ''}
+                  </div>
                 ` : ''}
               </div>
             </div>

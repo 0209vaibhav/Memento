@@ -2671,7 +2671,28 @@ document.addEventListener("DOMContentLoaded", function () {
             if (memento.media && memento.media.length > 0) {
               const firstMedia = memento.media[0];
               const mediaUrl = typeof firstMedia === 'string' ? firstMedia : firstMedia.url;
-              el.style.backgroundImage = `url(${mediaUrl})`;
+              const mediaType = typeof firstMedia === 'string' ? 'image' : firstMedia.type;
+              
+              if (mediaType === 'video' || mediaUrl.endsWith('.mp4') || mediaUrl.endsWith('.webm')) {
+                // For videos, create a video element
+                const video = document.createElement('video');
+                video.src = mediaUrl;
+                video.muted = true;
+                video.loop = true;
+                video.playsInline = true;
+                video.style.width = '100%';
+                video.style.height = '100%';
+                video.style.objectFit = 'cover';
+                el.appendChild(video);
+                
+                // Start playing when marker is added
+                video.play().catch(error => {
+                  console.log('Video autoplay failed:', error);
+                });
+              } else {
+                // For images, use background image
+                el.style.backgroundImage = `url(${mediaUrl})`;
+              }
             }
             
             // Create marker
@@ -2790,7 +2811,28 @@ document.addEventListener("DOMContentLoaded", function () {
             if (memento.media && memento.media.length > 0) {
               const firstMedia = memento.media[0];
               const mediaUrl = typeof firstMedia === 'string' ? firstMedia : firstMedia.url;
-              el.style.backgroundImage = `url(${mediaUrl})`;
+              const mediaType = typeof firstMedia === 'string' ? 'image' : firstMedia.type;
+              
+              if (mediaType === 'video' || mediaUrl.endsWith('.mp4') || mediaUrl.endsWith('.webm')) {
+                // For videos, create a video element
+                const video = document.createElement('video');
+                video.src = mediaUrl;
+                video.muted = true;
+                video.loop = true;
+                video.playsInline = true;
+                video.style.width = '100%';
+                video.style.height = '100%';
+                video.style.objectFit = 'cover';
+                el.appendChild(video);
+                
+                // Start playing when marker is added
+                video.play().catch(error => {
+                  console.log('Video autoplay failed:', error);
+                });
+              } else {
+                // For images, use background image
+                el.style.backgroundImage = `url(${mediaUrl})`;
+              }
             }
             
             // Create marker
@@ -3837,7 +3879,28 @@ document.addEventListener("DOMContentLoaded", function () {
           if (memento.media && memento.media.length > 0) {
             const firstMedia = memento.media[0];
             const mediaUrl = typeof firstMedia === 'string' ? firstMedia : firstMedia.url;
-            el.style.backgroundImage = `url(${mediaUrl})`;
+            const mediaType = typeof firstMedia === 'string' ? 'image' : firstMedia.type;
+            
+            if (mediaType === 'video' || mediaUrl.endsWith('.mp4') || mediaUrl.endsWith('.webm')) {
+              // For videos, create a video element
+              const video = document.createElement('video');
+              video.src = mediaUrl;
+              video.muted = true;
+              video.loop = true;
+              video.playsInline = true;
+              video.style.width = '100%';
+              video.style.height = '100%';
+              video.style.objectFit = 'cover';
+              el.appendChild(video);
+              
+              // Start playing when marker is added
+              video.play().catch(error => {
+                console.log('Video autoplay failed:', error);
+              });
+            } else {
+              // For images, use background image
+              el.style.backgroundImage = `url(${mediaUrl})`;
+            }
           }
           
           // Create marker
@@ -4089,14 +4152,19 @@ document.addEventListener("DOMContentLoaded", function () {
       if (memento.media && memento.media.length > 0) {
             const firstMedia = memento.media[0];
             if (typeof firstMedia === 'string') {
-          mediaHtml = `<img src="${firstMedia}" alt="${memento.name || 'Memento'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-eye\\'></i></div>';">`;
+              // Check if it's a video by extension
+              if (firstMedia.endsWith('.mp4') || firstMedia.endsWith('.webm')) {
+                mediaHtml = `<video src="${firstMedia}" controls playsinline></video>`;
+              } else {
+                mediaHtml = `<img src="${firstMedia}" alt="${memento.name || 'Memento'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-eye\\'></i></div>';">`;
+              }
             } else if (firstMedia && typeof firstMedia === 'object') {
               const mediaUrl = firstMedia.url || firstMedia.path || firstMedia.src;
               if (mediaUrl) {
-                if (firstMedia.type && firstMedia.type.startsWith('video/')) {
-                  mediaHtml = `<video src="${mediaUrl}" controls></video>`;
+                if (firstMedia.type === 'video' || mediaUrl.endsWith('.mp4') || mediaUrl.endsWith('.webm')) {
+                  mediaHtml = `<video src="${mediaUrl}" controls playsinline></video>`;
                 } else {
-              mediaHtml = `<img src="${mediaUrl}" alt="${memento.name || 'Memento'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-eye\\'></i></div>';">`;
+                  mediaHtml = `<img src="${mediaUrl}" alt="${memento.name || 'Memento'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-eye\\'></i></div>';">`;
                 }
               }
             }
@@ -4197,12 +4265,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 ${memento.mementoTags && memento.mementoTags.length > 0 ? `
                   <div class="memento-tags">
-                    ${memento.mementoTags.map(tag => `
+                    ${memento.mementoTags.slice(0, 3).map(tag => `
                         <span class="tag">
                         <span class="tag-symbol">${tag.match(/^[\u{1F300}-\u{1F9FF}]/u)?.[0] || ''}</span>
                         <span class="tag-name">${tag.replace(/^[\u{1F300}-\u{1F9FF}]/u, '').trim()}</span>
                         </span>
                     `).join('')}
+                    ${memento.mementoTags.length > 3 ? `
+                        <span class="tag">
+                        <span class="tag-symbol">...</span>
+                        <span class="tag-name">+${memento.mementoTags.length - 3} more</span>
+                        </span>
+                    ` : ''}
                   </div>
                 ` : ''}
               ` : `
@@ -4215,13 +4289,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 ${memento.tags && memento.tags.length > 0 ? `
                   <div class="memento-tags">
-                    ${memento.tags.map(tag => {
+                    ${memento.tags.slice(0, 3).map(tag => {
                       const tagInfo = window.tags.find(t => t.id === tag) || { symbol: '', name: '' };
                         return `<span class="tag">
                           <span class="tag-symbol">${tagInfo.symbol}</span>
                           <span class="tag-name">${tagInfo.name}</span>
                         </span>`;
                     }).join('')}
+                    ${memento.tags.length > 3 ? `
+                        <span class="tag">
+                        <span class="tag-symbol">...</span>
+                        <span class="tag-name">+${memento.tags.length - 3} more</span>
+                        </span>
+                    ` : ''}
                   </div>
                 ` : ''}
               `}

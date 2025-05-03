@@ -593,18 +593,26 @@ async function createCuratedMementoElement(memento) {
     }
   }
   
-  // Create media HTML
-  let mediaHtml = `
-    <div class="placeholder-media">
-      <i class="fas fa-image"></i>
-    </div>
-  `;
-  
-  if (memento.media && memento.media.length > 0) {
+  // Handle media content
+  let mediaHtml = '<div class="placeholder-media"><i class="fas fa-image"></i></div>';
+  if (memento.media && Array.isArray(memento.media) && memento.media.length > 0) {
     const firstMedia = memento.media[0];
-    const mediaUrl = typeof firstMedia === 'string' ? firstMedia : firstMedia.url;
-    if (mediaUrl) {
-      mediaHtml = `<img src="${mediaUrl}" alt="${memento.name}">`;
+    if (typeof firstMedia === 'string') {
+      // Check if it's a video by extension
+      if (firstMedia.endsWith('.mp4') || firstMedia.endsWith('.webm')) {
+        mediaHtml = `<video src="${firstMedia}" controls playsinline></video>`;
+      } else {
+        mediaHtml = `<img src="${firstMedia}" alt="${memento.name || 'Memento'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-image\\'></i></div>';">`;
+      }
+    } else if (firstMedia && typeof firstMedia === 'object') {
+      const mediaUrl = firstMedia.url || firstMedia.path || firstMedia.src;
+      if (mediaUrl) {
+        if (firstMedia.type === 'video' || mediaUrl.endsWith('.mp4') || mediaUrl.endsWith('.webm')) {
+          mediaHtml = `<video src="${mediaUrl}" controls playsinline></video>`;
+        } else {
+          mediaHtml = `<img src="${mediaUrl}" alt="${memento.name || 'Memento'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-image\\'></i></div>';">`;
+        }
+      }
     }
   }
   

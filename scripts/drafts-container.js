@@ -104,12 +104,17 @@ function initializeDraftsContainer() {
     if (draft.media && Array.isArray(draft.media) && draft.media.length > 0) {
         const firstMedia = draft.media[0];
         if (typeof firstMedia === 'string') {
-            mediaHtml = `<img src="${firstMedia}" alt="${draft.name || 'Draft'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-image\\'></i></div>';">`;
+            // Check if it's a video by extension
+            if (firstMedia.endsWith('.mp4') || firstMedia.endsWith('.webm')) {
+                mediaHtml = `<video src="${firstMedia}" controls playsinline></video>`;
+            } else {
+                mediaHtml = `<img src="${firstMedia}" alt="${draft.name || 'Draft'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-image\\'></i></div>';">`;
+            }
         } else if (firstMedia && typeof firstMedia === 'object') {
             const mediaUrl = firstMedia.url || firstMedia.path || firstMedia.src;
             if (mediaUrl) {
-                if (firstMedia.type && firstMedia.type.startsWith('video/')) {
-                    mediaHtml = `<video src="${mediaUrl}" controls></video>`;
+                if (firstMedia.type === 'video' || mediaUrl.endsWith('.mp4') || mediaUrl.endsWith('.webm')) {
+                    mediaHtml = `<video src="${mediaUrl}" controls playsinline></video>`;
                 } else {
                     mediaHtml = `<img src="${mediaUrl}" alt="${draft.name || 'Draft'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-image\\'></i></div>';">`;
                 }
