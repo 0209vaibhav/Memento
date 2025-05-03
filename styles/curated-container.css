@@ -1,13 +1,11 @@
 /* ========== CURATED CONTAINER STYLES ========== */
 
 .curated-container {
-  margin-bottom: 15px;
-  margin-top: 15px;
   position: absolute;
-  top: 125px;
+  top: 110px;
   left: 0px;
   right: 0px;
-  bottom: 75px;
+  bottom: 60px;
   background: white;
   padding-left: 15px;
   padding-right: 15px;
@@ -62,16 +60,24 @@
 .curated-tabs {
   display: flex;
   gap: 10px;
+  align-items: center;
+  border-top: 1px solid #e5e7eb;
   border-bottom: 1px solid #e5e7eb;
   justify-content: space-between;
   position: fixed;
-  top: 178px;
   left: 0;
   right: 0;
   background: white;
   z-index: 1000;
-  padding: 8px 15px;
+  padding: 8px;
+  padding-left: 15px;
+  padding-right: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 25px;
+}
+
+.curated-tabs .curated-tab-btn {
+  height: 30px;
 }
 
 .curated-tab-btn {
@@ -156,7 +162,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: 120px; /* Adjust based on header + tabs height */
+  margin-top: 60px; /* Adjust based on header + tabs height */
   margin-bottom: 60px;
   padding-bottom: 16px;
 }
@@ -427,20 +433,22 @@
   padding-right: 15px;
   background: #ffffff;
   border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
   position: fixed;
-  bottom: 75px;
+  bottom: 60px;
   left: 0;
   right: 0;
   z-index: 1000;
   box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  height: 25px;
 }
 
 .recommendation-pagination .pagination-btn,
 .trending-pagination .pagination-btn,
 .daily-pagination .pagination-btn,
 .near-me-pagination .pagination-btn {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   border: 1px solid #e5e7eb;
   border-radius: 50%;
   background: #ffffff;
@@ -478,8 +486,8 @@
 .trending-pagination .refresh-btn,
 .daily-pagination .refresh-btn,
 .near-me-pagination .refresh-btn {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   border: 1px solid #e5e7eb;
   border-radius: 50%;
   background: #ffffff;

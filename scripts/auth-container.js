@@ -201,10 +201,6 @@ async function showUserProfile(user) {
     
     authContainer.innerHTML = `
       <div class="profile-container">
-        <div class="profile-header">
-          <h2><i class="fas fa-id-card"></i> Explorer Profile</h2>
-        </div>
-        
         <div class="profile-completion">
           <div class="completion-bar">
             <div class="completion-fill" style="width: ${completionScore}%"></div>
