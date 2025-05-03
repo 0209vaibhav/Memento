@@ -1007,8 +1007,7 @@ document.addEventListener("DOMContentLoaded", function () {
           'explorer': 'profile',
           'journey': 'capture',
           'discovery': 'live-feed',
-          'archive': 'favorites',
-          'about': 'info'
+          'archive': 'favorites'
         };
 
         // Get all subtab buttons for the current activity
@@ -1210,8 +1209,7 @@ document.addEventListener("DOMContentLoaded", function () {
       'explorer': 'profile',
       'journey': 'capture',
       'discovery': 'live-feed',
-      'archive': 'favorites',
-      'about': 'info'
+      'archive': 'favorites'
     };
 
     // Get all subtab buttons for the current activity
@@ -1625,15 +1623,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const durationSelect = document.getElementById('duration-select');
       if (!durationSelect) return;
 
-      const durations = [
-        { id: 'less-than-15min', name: 'Less than 15 minutes', symbol: '⚡' },
-        { id: '15min-1hr', name: '15 minutes - 1 hour', symbol: '⏱️' },
-        { id: '1-2hrs', name: '1 - 2 hours', symbol: '⏰' },
-        { id: '2-6hrs', name: '2 - 6 hours', symbol: '🕐' },
-        { id: '6-12hrs', name: '6 - 12 hours', symbol: '🕑' },
-        { id: '12-24hrs', name: '12 - 24 hours', symbol: '🕒' },
-        { id: 'eternal', name: 'Eternal', symbol: '♾️' }
-      ];
+      // Use durations from the loaded JSON file
+      const durations = window.durations || [];
 
       durationSelect.innerHTML = '<option value="">Select duration...</option>' +
         durations.map(duration => `
@@ -1803,10 +1794,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Populate all selects and initialize them
-    populateTags();
-    populateCategories();
-    populateDurations();
-    initializeSelects();
+    async function initializeFormSelects() {
+      // Wait for categories, tags, and durations to be loaded
+      if (!window.durations) {
+        console.log('Waiting for durations to load...');
+        await new Promise(resolve => {
+          const checkDurations = setInterval(() => {
+            if (window.durations) {
+              clearInterval(checkDurations);
+              resolve();
+            }
+          }, 100);
+        });
+      }
+
+      populateTags();
+      populateCategories();
+      populateDurations();
+      initializeSelects();
+    }
+
+    // Initialize form selects
+    initializeFormSelects();
 
     // Remove the add buttons since they're no longer needed
     document.querySelectorAll('.add-selection-btn').forEach(button => button.remove());
@@ -4153,7 +4162,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 ${memento.duration ? `
                     <p class="memento-duration">
                       <i class="fas fa-hourglass-half"></i>
-                    ${allDurations.find(d => d.id === memento.duration)?.name || memento.duration}
+                    ${window.durations.find(d => d.id === memento.duration)?.name || memento.duration}
                     </p>
                   ` : ''}
               `}

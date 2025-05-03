@@ -496,7 +496,7 @@ function initializeMyMementos() {
                 ${memento.duration ? `
                   <p class="memento-duration">
                     <i class="fas fa-hourglass-half"></i>
-                    ${allDurations.find(d => d.id === memento.duration)?.name || memento.duration}
+                    ${window.durations.find(d => d.id === memento.duration)?.name || memento.duration}
                   </p>
                 ` : ''}
 

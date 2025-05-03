@@ -3,39 +3,37 @@ let currentRadius = null;
 let mapboxMap = null;
 let isRadiusEnabled = true; // Set to true by default
 
-// Load categories and tags from JSON files
+// Load categories, tags, and durations from JSON files
 let allCategories = [];
 let allTags = [];
+let allDurations = [];
 
-// Function to load categories and tags
+// Function to load categories, tags, and durations
 async function loadCategoriesAndTags() {
   try {
     const categoriesResponse = await fetch('memento_categories.json');
     const tagsResponse = await fetch('memento_tags.json');
+    const durationsResponse = await fetch('memento_durations.json');
     
     allCategories = await categoriesResponse.json();
     allTags = await tagsResponse.json();
+    allDurations = await durationsResponse.json();
+    
+    // Make them available globally
+    window.categories = allCategories;
+    window.tags = allTags;
+    window.durations = allDurations;
     
     console.log('Loaded categories:', allCategories);
     console.log('Loaded tags:', allTags);
+    console.log('Loaded durations:', allDurations);
   } catch (error) {
-    console.error('Error loading categories and tags:', error);
+    console.error('Error loading categories, tags, and durations:', error);
   }
 }
 
 // Call the function when the script loads
 loadCategoriesAndTags();
-
-// Define all possible durations with their symbols
-const allDurations = [
-  { id: 'less-than-15min', name: 'Less than 15 minutes', symbol: '⚡' },
-  { id: '15min-1hr', name: '15 minutes - 1 hour', symbol: '⏱️' },
-  { id: '1-2hrs', name: '1 - 2 hours', symbol: '⏰' },
-  { id: '2-6hrs', name: '2 - 6 hours', symbol: '🕐' },
-  { id: '6-12hrs', name: '6 - 12 hours', symbol: '🕑' },
-  { id: '12-24hrs', name: '12 - 24 hours', symbol: '🕒' },
-  { id: 'eternal', name: 'Eternal', symbol: '♾️' }
-];
 
 // Live Feed Tabs Functionality
 function initializeLiveFeedTabs() {

@@ -728,7 +728,6 @@ video.live-feed-preview-media-item::-webkit-media-controls {
 
 .memento-info-list .memento-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   border-color: #000000;
 }
 
@@ -751,25 +750,25 @@ video.live-feed-preview-media-item::-webkit-media-controls {
 .memento-info-list .memento-item .media-section {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/9; /* 16:9 aspect ratio for info view */
   margin-bottom: 16px;
   overflow: hidden;
   background: #f3f4f6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .memento-info-list .memento-item .memento-media {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
-  height: 100%;
+  height: auto;
   overflow: hidden;
 }
 
 .memento-info-list .memento-item .memento-media img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   display: block;
 }
 
@@ -1097,25 +1096,25 @@ video.live-feed-preview-media-item::-webkit-media-controls {
 .memento-info-list .media-section {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/9; /* 16:9 aspect ratio for info view */
   margin-bottom: 16px;
   overflow: hidden;
   background: #f3f4f6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .memento-info-list .media-section .memento-media {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
-  height: 100%;
+  height: auto;
   overflow: hidden;
 }
 
 .memento-info-list .media-section .memento-media img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   display: block;
 }
 
