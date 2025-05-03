@@ -37,7 +37,7 @@
         width: 100%;
         box-sizing: border-box;
         background-color: #000000;
-        height: 75px;
+        height: 60px;
         position: fixed;
         top: 0;
         z-index: 100;
@@ -315,7 +315,7 @@
     position: fixed;
     left: 0;
     right: 0;
-    top: 75px;
+    top: 60px;
     margin: 0;
     display: none;
     border-top: 1px solid #ccc;
@@ -409,9 +409,11 @@
   .activity-tabs-container {
     width: 100%;
     padding: 0 10px;
+    border-bottom: 1px solid #e5e7eb;
+    border-top: 1px solid #e5e7eb;
     box-sizing: border-box;
     background-color: #000000;
-    height: 75px;
+    height: 60px;
     display: flex;
     align-items: center;
     margin-top: auto; /* This will push it to the bottom of its container */
@@ -468,7 +470,7 @@
   }
   
   .activity-tabs-container .activity-tab span {
-    font-size: 0.9rem;
+    font-size: 1rem;
     text-align: center;
     color: hsl(0, 0%, 25%);
     line-height: 1.1;

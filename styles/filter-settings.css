@@ -2,13 +2,12 @@
 
 /* --- Filter Container --- */
 .filter-settings-container {
-  margin-bottom: 15px;
-  margin-top: 15px;
+
   position: absolute;
-  top: 125px;
+  top: 110px;
   left: 0px;
   right: 0px;
-  bottom: 75px;
+  bottom: 60px;
   background: white;
   padding-left: 15px;
   padding-right: 15px;
