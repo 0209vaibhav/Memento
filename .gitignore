@@ -69,3 +69,6 @@ temp/
 coverage/
 .nyc_output/
 test-results/
+
+# Firebase config with sensitive keys
+scripts/firebase-config.js
