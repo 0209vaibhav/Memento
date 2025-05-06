@@ -791,6 +791,17 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
+        // Add move event listener for radius updates
+        map.on('moveend', () => {
+            updateMarkersRadius();
+        });
+
+        // Add zoom event listener for marker sizes
+        map.on('zoom', () => {
+            updateMarkerSizes(map.getZoom());
+            updateMarkersRadius();
+        });
+
     } catch (error) {
         console.error('Error initializing map:', error);
     }
@@ -2910,7 +2921,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const isRadiusEnabled = radiusToggle.checked;
     const radiusMiles = parseFloat(radiusSlider.value);
     const center = userLocation || map.getCenter().toArray();
-    const currentZoom = map.getZoom();
 
     if (!window.markers || !window.markers.length) {
       console.log('No markers to update');
@@ -2938,29 +2948,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // Handle radius visibility
         if (update.inRadius) {
           element.classList.remove('out-of-radius');
-          element.style.removeProperty('opacity');
-          element.style.removeProperty('pointer-events');
-          element.style.removeProperty('filter');
         } else {
           element.classList.add('out-of-radius');
-          // Let CSS handle the styling for out-of-radius markers
         }
-
-        // Update size based on zoom level
-        element.classList.remove('zoom-level-0', 'zoom-level-1', 'zoom-level-2', 'zoom-level-3', 'zoom-level-4');
-        let zoomLevel;
-        if (currentZoom <= 12) {
-          zoomLevel = 0;
-        } else if (currentZoom <= 13) {
-          zoomLevel = 1;
-        } else if (currentZoom <= 14) {
-          zoomLevel = 2;
-        } else if (currentZoom <= 15) {
-          zoomLevel = 3;
-        } else {
-          zoomLevel = 4;
-        }
-        element.classList.add(`zoom-level-${zoomLevel}`);
       });
     });
   }
@@ -3864,10 +3854,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Load public mementos data
       const publicMementos = await loadPublicMementosData();
+      console.log('Loaded public mementos:', publicMementos);
       
       // Create markers for each public memento
       publicMementos.forEach(memento => {
         try {
+          console.log('Creating marker for memento:', memento);
+          
           // Create marker element
           const el = document.createElement('div');
           el.className = 'public-memento-marker';
@@ -3915,7 +3908,11 @@ document.addEventListener("DOMContentLoaded", function () {
           marker.mementoId = memento.id;
           
           // Add click event to show memento details
-          marker.getElement().addEventListener('click', () => {
+          const markerElement = marker.getElement();
+          console.log('Adding click handler to marker element:', markerElement);
+          
+          markerElement.addEventListener('click', () => {
+            console.log('Marker clicked:', memento);
             // Only expand panel on mobile devices
             if (window.innerWidth < 1024) {
               const infoTab = document.querySelector('.info-tab');
@@ -3939,6 +3936,7 @@ document.addEventListener("DOMContentLoaded", function () {
           
           // Add marker to global markers array
           window.markers.push(marker);
+          console.log('Added marker to global markers array');
         } catch (error) {
           console.error('Error creating marker:', error);
         }
@@ -3946,6 +3944,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Update markers radius after creating them
       updateMarkersRadius();
+      console.log('Finished loading public memento markers');
     } catch (error) {
       console.error('Error loading public memento markers:', error);
     }
@@ -3960,7 +3959,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const radiusToggle = document.getElementById('radius-toggle');
     const radiusSlider = document.getElementById('radius-slider');
-              
+    
     if (!radiusToggle || !radiusSlider) {
       console.log('Radius controls not found');
       return;
@@ -3969,7 +3968,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const isRadiusEnabled = radiusToggle.checked;
     const radiusMiles = parseFloat(radiusSlider.value);
     const center = userLocation || map.getCenter().toArray();
-    const currentZoom = map.getZoom();
 
     if (!window.markers || !window.markers.length) {
       console.log('No markers to update');
@@ -3997,29 +3995,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // Handle radius visibility
         if (update.inRadius) {
           element.classList.remove('out-of-radius');
-          element.style.removeProperty('opacity');
-          element.style.removeProperty('pointer-events');
-          element.style.removeProperty('filter');
         } else {
           element.classList.add('out-of-radius');
-          // Let CSS handle the styling for out-of-radius markers
         }
-
-        // Update size based on zoom level
-        element.classList.remove('zoom-level-0', 'zoom-level-1', 'zoom-level-2', 'zoom-level-3', 'zoom-level-4');
-        let zoomLevel;
-        if (currentZoom <= 12) {
-          zoomLevel = 0;
-        } else if (currentZoom <= 13) {
-          zoomLevel = 1;
-        } else if (currentZoom <= 14) {
-          zoomLevel = 2;
-        } else if (currentZoom <= 15) {
-          zoomLevel = 3;
-        } else {
-          zoomLevel = 4;
-        }
-        element.classList.add(`zoom-level-${zoomLevel}`);
       });
     });
   }
@@ -5243,7 +5221,6 @@ function setupRadiusFilterEvents(radiusSlider, radiusRangeToggle) {
     const isRadiusEnabled = radiusToggle.checked;
     const radiusMiles = parseFloat(radiusSlider.value);
     const center = userLocation || map.getCenter().toArray();
-    const currentZoom = map.getZoom();
 
     if (!window.markers || !window.markers.length) {
       console.log('No markers to update');
@@ -5260,21 +5237,20 @@ function setupRadiusFilterEvents(radiusSlider, radiusRangeToggle) {
       const coordinates = marker.getLngLat().toArray();
       const isInRadius = !isRadiusEnabled || isPointWithinRadius(coordinates, center, radiusMiles);
       
-      console.log('Updating marker:', {
-        coordinates,
-        isInRadius,
-        currentClass: markerElement.className
-      });
-
-      markerElement.classList.toggle('out-of-radius', !isInRadius);
-      return { element: markerElement, visible: isInRadius };
+      return { element: markerElement, inRadius: isInRadius };
     }).filter(Boolean);
 
     // Apply all DOM updates in a single batch
     requestAnimationFrame(() => {
       updates.forEach(update => {
-        update.element.style.opacity = update.visible ? '1' : '0.3';
-        update.element.style.pointerEvents = update.visible ? 'auto' : 'none';
+        const element = update.element;
+        
+        // Handle radius visibility
+        if (update.inRadius) {
+          element.classList.remove('out-of-radius');
+        } else {
+          element.classList.add('out-of-radius');
+        }
       });
     });
   }
