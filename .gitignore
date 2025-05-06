@@ -36,7 +36,7 @@ yarn-error.log*
 
 # OS
 .DS_Store
-Thumbs.db
+Thumbs.db 
 desktop.ini
 
 # API Keys and sensitive files

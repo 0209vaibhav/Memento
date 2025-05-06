@@ -606,7 +606,7 @@ async function createCuratedMementoElement(memento) {
       }
     } else if (firstMedia && typeof firstMedia === 'object') {
       const mediaUrl = firstMedia.url || firstMedia.path || firstMedia.src;
-      if (mediaUrl) {
+    if (mediaUrl) {
         if (firstMedia.type === 'video' || mediaUrl.endsWith('.mp4') || mediaUrl.endsWith('.webm')) {
           mediaHtml = `<video src="${mediaUrl}" controls playsinline></video>`;
         } else {

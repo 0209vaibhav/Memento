@@ -196,7 +196,7 @@ function initializeMyMementos() {
         if (firstMedia.endsWith('.mp4') || firstMedia.endsWith('.webm')) {
           mediaHtml = `<video src="${firstMedia}" controls playsinline></video>`;
         } else {
-          mediaHtml = `<img src="${firstMedia}" alt="${memento.name || 'Memento'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-image\\'></i></div>';">`;
+        mediaHtml = `<img src="${firstMedia}" alt="${memento.name || 'Memento'}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-media\\'><i class=\\'fas fa-image\\'></i></div>';">`;
         }
       } else if (firstMedia && typeof firstMedia === 'object') {
         const mediaUrl = firstMedia.url || firstMedia.path || firstMedia.src;

@@ -868,7 +868,7 @@ async function loadPreviewContent() {
                     ${tagSymbols.length > 3 ? `
                       <span class="tag more-tags">
                         <span class="tag-symbol">+${tagSymbols.length - 3}</span>
-                      </span>
+                  </span>
                     ` : ''}
                   </div>
                 ` : ''}

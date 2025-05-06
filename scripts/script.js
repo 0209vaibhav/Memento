@@ -5200,29 +5200,11 @@ function setupRadiusFilterEvents(radiusSlider, radiusRangeToggle) {
       unit: 'imperial'
     }), 'bottom-right');
 
-    // Add 3D building layer
     map.on('load', () => {
-      // Add 3D building layer
-      map.addLayer({
-        'id': '3d-buildings',
-        'source': 'composite',
-        'source-layer': 'building',
-        'filter': ['==', 'extrude', 'true'],
-        'type': 'fill-extrusion',
-        'minzoom': 15,
-        'paint': {
-          'fill-extrusion-color': '#aaa',
-          'fill-extrusion-height': ['get', 'height'],
-          'fill-extrusion-base': ['get', 'min_height'],
-          'fill-extrusion-opacity': 0.6
-        }
-      });
-
       // Initialize radius circle by default
       const radiusToggle = document.getElementById('radius-toggle');
       const radiusSlider = document.getElementById('radius-slider');
       
-      // Set radius toggle to checked by default if it exists
       if (radiusToggle) {
         radiusToggle.checked = true;
       }
@@ -5237,24 +5219,7 @@ function setupRadiusFilterEvents(radiusSlider, radiusRangeToggle) {
 
     // Handle map style changes
     map.on('style.load', () => {
-      // Re-add 3D building layer when style changes
-      if (map.getLayer('3d-buildings')) {
-        map.removeLayer('3d-buildings');
-      }
-      map.addLayer({
-        'id': '3d-buildings',
-        'source': 'composite',
-        'source-layer': 'building',
-        'filter': ['==', 'extrude', 'true'],
-        'type': 'fill-extrusion',
-        'minzoom': 15,
-        'paint': {
-          'fill-extrusion-color': '#aaa',
-          'fill-extrusion-height': ['get', 'height'],
-          'fill-extrusion-base': ['get', 'min_height'],
-          'fill-extrusion-opacity': 0.6
-        }
-      });
+      // Initialize any style-dependent features here
     });
 
     return map;
