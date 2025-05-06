@@ -4,7 +4,6 @@ serviceAccountKey.json
 .venv/
 venv/
 *firebase-adminsdk*.json
-firebase-config.js
 firebase-config.local.js
 firebase-config.prod.js
 
