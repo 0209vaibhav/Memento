@@ -34,7 +34,6 @@
   filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
 }
 
-
 /* Out of radius styles */
 .all-user-memento-marker.out-of-radius,
 .public-memento-marker.out-of-radius,
@@ -47,18 +46,6 @@
   border-bottom-width: 5px !important;
   opacity: 0.25 !important;
   filter: grayscale(1) !important;
-  pointer-events: none !important;
-}
-
-.all-user-memento-marker.out-of-radius img,
-.public-memento-marker.out-of-radius img,
-.user-memento-marker.out-of-radius img,
-.all-user-memento-marker.out-of-radius video,
-.public-memento-marker.out-of-radius video,
-.user-memento-marker.out-of-radius video {
-  filter: grayscale(1) !important;
-  opacity: 0.25 !important;
-  pointer-events: none !important;
 }
 
 .all-user-memento-marker.out-of-radius::after,
@@ -76,95 +63,39 @@
   border-top: 5px solid #ffffff;
   filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
 }
- 
-
-/* Zoom level based sizes */
-.user-memento-marker.zoom-level-0,
-.public-memento-marker.zoom-level-0,
-.all-user-memento-marker.zoom-level-0 {
-  width: 10px;
-  height: 10px;
-  border-left-width: 1px;
-  border-right-width: 1px;
-  border-top-width: 1px;
-  border-bottom-width: 2px;
-}
-
-.zoom-level-0::after {
-  border-left-width: 2px;
-  border-right-width: 2px;
-  border-top-width: 2px;
-  bottom: -2px;
-}
-.all-user-memento-marker.zoom-level-0.out-of-radius,
-.public-memento-marker.zoom-level-0.out-of-radius,
-.user-memento-marker.zoom-level-0.out-of-radius {
-  opacity: 0.50;
-  filter: grayscale(1);
-  pointer-events: none;
-}
-
-.user-memento-marker.zoom-level-1,
-.public-memento-marker.zoom-level-1,
-.all-user-memento-marker.zoom-level-1 {
-  width: 20px;
-  height: 20px;
-  border-left-width: 1px;
-  border-right-width: 1px;
-  border-top-width: 1px;
-  border-bottom-width: 5px;
-}
-
-.zoom-level-1::after {
-  border-left-width: 5px;
-  border-right-width: 5px;
-  border-top-width: 5px;
-  bottom: -10px;
-}
-.all-user-memento-marker.zoom-level-1.out-of-radius,
-.public-memento-marker.zoom-level-1.out-of-radius,
-.user-memento-marker.zoom-level-1.out-of-radius {
-  opacity: 0.50;
-  filter: grayscale(1);
-  pointer-events: none;
-}
-
-.user-memento-marker.zoom-level-2,
-.public-memento-marker.zoom-level-2,
-.all-user-memento-marker.zoom-level-2 {
-  width: 30px;
-  height: 30px;
-  border-left-width: 1px;
-  border-right-width: 1px;
-  border-top-width: 1px;
-  border-bottom-width: 5px;
-}
-
-.zoom-level-2::after {
-  border-left-width: 5px;
-  border-right-width: 5px;
-  border-top-width: 5px;
-  bottom: -10px;
-}
-.all-user-memento-marker.zoom-level-2.out-of-radius,  
-.public-memento-marker.zoom-level-2.out-of-radius,
-.user-memento-marker.zoom-level-2.out-of-radius {
-  opacity: 0.50;
-  filter: grayscale(1);
-  pointer-events: none;
-}
 
 /* Highlight styles */
 .highlighted-marker {
   box-shadow: 0 0 0 3px #FF0080, 0 4px 8px rgba(0,0,0,0.2);
   transform: rotate(-2deg) scale(1.05);
-  transition: all 0.2s ease-in-out;
 }
 
 .highlighted-marker::after {
   transform: translateX(-50%) rotate(-2deg) scale(1.05);
 }
 
+/* Media styles */
+.user-memento-marker img,
+.public-memento-marker img,
+.all-user-memento-marker img,
+.user-memento-marker video,
+.public-memento-marker video,
+.all-user-memento-marker video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Out of radius media styles */
+.all-user-memento-marker.out-of-radius img,
+.public-memento-marker.out-of-radius img,
+.user-memento-marker.out-of-radius img,
+.all-user-memento-marker.out-of-radius video,
+.public-memento-marker.out-of-radius video,
+.user-memento-marker.out-of-radius video {
+  filter: grayscale(1) !important;
+  opacity: 0.25 !important;
+}
 
 /* Common popup styles */
 .user-memento-popup,
