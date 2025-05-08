@@ -2128,37 +2128,74 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
       
-        mediaPreview.innerHTML = '';
+      mediaPreview.innerHTML = '';
+      
+      uploadedFiles.forEach((file, index) => {
+        const reader = new FileReader();
         
-        uploadedFiles.forEach((file, index) => {
-            const reader = new FileReader();
-        
-            reader.onload = (e) => {
-            const previewItem = document.createElement('div');
-            previewItem.className = 'media-preview-item';
-            
-            if (file.type.startsWith('image/')) {
-              const img = document.createElement('img');
-              img.src = e.target.result;
-            img.alt = 'Memento media';
-              previewItem.appendChild(img);
-            } else if (file.type.startsWith('video/')) {
-              const video = document.createElement('video');
-              video.src = e.target.result;
-              video.controls = true;
-              previewItem.appendChild(video);
-            }
+        reader.onload = (e) => {
+          const previewItem = document.createElement('div');
+          previewItem.className = 'media-preview-item';
           
+          if (file.type.startsWith('image/')) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = 'Memento media';
+            previewItem.appendChild(img);
+
+            // Extract EXIF data for images
+            EXIF.getData(file, function() {
+              const exifData = EXIF.getAllTags(this);
+              
+              // Extract timestamp
+              if (exifData.DateTimeOriginal) {
+                const timestamp = exifData.DateTimeOriginal;
+                const date = new Date(timestamp.replace(/(\d{4}):(\d{2}):(\d{2})/, '$1-$2-$3'));
+                const mementoTimestampInput = document.getElementById('memento-timestamp');
+                if (mementoTimestampInput) {
+                  mementoTimestampInput.value = formatDateTimeForInput(date);
+                }
+              }
+              
+              // Extract location
+              if (exifData.GPSLatitude && exifData.GPSLongitude) {
+                const lat = convertDMSToDD(exifData.GPSLatitude, exifData.GPSLatitudeRef);
+                const lng = convertDMSToDD(exifData.GPSLongitude, exifData.GPSLongitudeRef);
+                
+                if (lat && lng) {
+                  // Use Google's Geocoder to get address
+                  const geocoder = new google.maps.Geocoder();
+                  geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+                    if (status === 'OK' && results[0]) {
+                      const locationInput = document.getElementById('memento-location');
+                      if (locationInput) {
+                        locationInput.value = results[0].formatted_address;
+                        selectedLocation = {
+                          address: results[0].formatted_address,
+                          coordinates: { lat, lng }
+                        };
+                      }
+                    }
+                  });
+                }
+              }
+            });
+          } else if (file.type.startsWith('video/')) {
+            const video = document.createElement('video');
+            video.src = e.target.result;
+            video.controls = true;
+            previewItem.appendChild(video);
+          }
+        
           // Add remove button
           const removeButton = document.createElement('button');
           removeButton.className = 'remove-media';
           removeButton.innerHTML = '<i class="fas fa-times"></i>';
           removeButton.onclick = (e) => {
-            e.stopPropagation(); // Prevent event from bubbling up
+            e.stopPropagation();
             uploadedFiles.splice(index, 1);
             previewItem.remove();
             
-            // If no files left, update the preview text
             if (uploadedFiles.length === 0) {
               const mediaHint = document.querySelector('.media-hint');
               if (mediaHint) {
@@ -2168,16 +2205,16 @@ document.addEventListener("DOMContentLoaded", function () {
           };
           
           previewItem.appendChild(removeButton);
-                mediaPreview.appendChild(previewItem);
-            };
+          mediaPreview.appendChild(previewItem);
+        };
         
         reader.onerror = (error) => {
           console.error('Error reading file:', error);
           showToast('Error reading file', 'error');
         };
         
-            reader.readAsDataURL(file);
-        });
+        reader.readAsDataURL(file);
+      });
       
       // Update the hint text
       const mediaHint = document.querySelector('.media-hint');
@@ -3959,7 +3996,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const radiusToggle = document.getElementById('radius-toggle');
     const radiusSlider = document.getElementById('radius-slider');
-    
+              
     if (!radiusToggle || !radiusSlider) {
       console.log('Radius controls not found');
       return;
@@ -5336,4 +5373,21 @@ function setupRadiusFilterEvents(radiusSlider, radiusRangeToggle) {
       }
     });
   };
+
+  // Helper function to convert DMS (Degrees, Minutes, Seconds) to DD (Decimal Degrees)
+  function convertDMSToDD(dms, ref) {
+    if (!dms) return null;
+    
+    const degrees = dms[0].numerator / dms[0].denominator;
+    const minutes = dms[1].numerator / dms[1].denominator;
+    const seconds = dms[2].numerator / dms[2].denominator;
+    
+    let dd = degrees + minutes / 60 + seconds / 3600;
+    
+    if (ref === 'S' || ref === 'W') {
+      dd = -dd;
+    }
+    
+    return dd;
+  }
 
